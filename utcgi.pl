@@ -17,6 +17,8 @@
 # ********************************************************
 
 1;
+# ********************************************************
+# Extract parameters into hash %PARMS
 sub CGIPARSE {
 # COnvert parameter names to UPPERCASE
 
@@ -74,21 +76,20 @@ sub cgiparse {
 }
 
 
+# ********************************************************
 # Convert current date/time to a neat string.
 sub timetostr {
     local ($t) = shift;
     local ($result) = scalar($t);
 
     require 'ctime.pl';
-    $result = &ctime($t);
-    # chop($result = &ctime(time));
-    
-    # Return result.
-    $result;
+    local $result = &ctime($t);
+    return result.
+
 }
 
+# ********************************************************
 # Subroutines to handle basic decoding of URL data.
-
 sub url_decode {
 # Webmasters handboek pag 45
     local ($s) = @_;
@@ -119,7 +120,6 @@ sub UTCGIGetHost {
 }
 
 sub UTCGITODAY {
-#    local $utc = shift;
     return &UTCGIToday(shift);
 }
     
@@ -128,9 +128,6 @@ sub UTCGIToday {
    local @d = localtime($utc);
    return sprintf("%4d%02d%02d",$d[5]+1900,$d[4]+1,$d[3]);
 }      
-
-
-
 
 sub UTCGIMutad {
    # convert date code or text to mutad
@@ -169,6 +166,7 @@ sub UTCGIDatum {
 } 
 	
 
+# *******************************************************
 sub UTCGIPARMS {
    # Show CGI-parameters
    print "\nParameters (utcgi.pl) <br>\n"; 
@@ -219,7 +217,8 @@ sub UTCGIFP{
 
 
 # ********************************************
-# Read  File
+# Read  File with checks
+# Returns content or error message
 sub ReadFile {
    local $file = shift;
    local $err = '';
@@ -240,7 +239,8 @@ sub ReadFile {
 }
 
 # ********************************************
-# Write  File
+# Write  File with checks
+# Returns mod-time and size or error message
 sub WriteFile {
    local $file = shift;
    local $txt  = shift;
@@ -248,15 +248,21 @@ sub WriteFile {
    local $err = '';
 
    unless (($force) && (-e $file )) {
-	 return "Bestand [$file] bestaat\n";
+	 return "[$file] bestaat\n";
    }
 
    unless (-w $file) {
-      return "Bestand [$file] is niet schrijfbaar\n"
+      return "[$file] is niet schrijfbaar\n"
    }
 
    open(F,">$file");
    print F $txt;
    close(F);
+
+   local @s = stat($file);
+   local $size = $s[7];
+   local $mtime= &UTCGIMUTAD($s[9]);
+   
+   return "[$file] modified=$mtime, size=$size\n"; 
 
 }
