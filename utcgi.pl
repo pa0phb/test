@@ -219,7 +219,7 @@ sub UTCGIFP{
 # ********************************************
 # Read  File with checks
 # Returns content or error message
-sub ReadFile {
+sub UTCGIReadFile {
    local $file = shift;
    local $err = '';
    local @inhoud;
@@ -241,7 +241,7 @@ sub ReadFile {
 # ********************************************
 # Write  File with checks
 # Returns mod-time and size or error message
-sub WriteFile {
+sub UTCGIWriteFile
    local $file = shift;
    local $txt  = shift;
    local $force= shift;
