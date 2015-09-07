@@ -1,4 +1,2 @@
 ## Titel
 Hello world!
-
-wijziging
